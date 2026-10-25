@@ -129,9 +129,9 @@ agencies.milano.push(
 const names={commessa:'Commessa',beauty:'Beauty',reception:'Reception',bar:'Bar / Ristorante',ufficio:'Ufficio',social:'Social',musica:'Musica',tata:'Tata / Assistenza',altro:'Altro'};
 let city='serravalle',group='tutti',house='tutti',viewMode='all',onlyFav=false;
 const storageKey='zoe-ricerca-2026-10-24-v2';let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch(e){}
-const validIds=new Set(jobs.map(x=>x.id));const favResetKey='zoe-light-favorites-correction-20261024';try{if(!localStorage.getItem(favResetKey)){for(const k of Object.keys(saved)){if(saved[k]&&saved[k].fav)delete saved[k].fav}localStorage.setItem(storageKey,JSON.stringify(saved));localStorage.setItem(favResetKey,'1')}}catch(e){}
+/* Preferiti e visti sono dati dell'utente: mai azzerarli durante gli aggiornamenti. */
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function persist(){try{localStorage.setItem(storageKey,JSON.stringify(saved))}catch(e){}}
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify(saved));const check=localStorage.getItem(storageKey);if(check!==JSON.stringify(saved))throw Error('Salvataggio non verificato');}catch(e){console.error('ZOE LIGHT: salvataggio non riuscito',e);alert('Attenzione: il browser non ha salvato preferiti e annunci visti. Verifica lo spazio e le impostazioni del browser.')}}
 function count(c,g,h){return jobs.filter(x=>x.city===c&&(g==='tutti'||x.group===g)&&(h==='tutti'||(h==='si'?x.housing==='si':x.housing!=='si'))).length}
 function btn(label,n,active,fn,disabled=false){const b=document.createElement('button');b.innerHTML=esc(label)+' <span class="num">'+n+'</span>';b.className=active?'sel':'';b.disabled=disabled;b.onclick=fn;return b}
 const iconFor={commessa:'🛍️',beauty:'💄',reception:'🛎️',bar:'☕',ufficio:'💼',social:'📱',musica:'🎵',tata:'🧸',altro:'✨'};
